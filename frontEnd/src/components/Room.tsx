@@ -6,7 +6,7 @@ export const Room = () =>{
     const name = searchParams.get('name');
     console.log('In room')
     useEffect(()=>{
-
+        
     },[name]);
     return <div>
         hi, {name}
