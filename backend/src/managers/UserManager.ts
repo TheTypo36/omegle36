@@ -20,6 +20,7 @@ export class UserManager{
         });
         this.queue.push(socket.id);
         this.clearQueue();
+        this.initHandlers(socket);
     }
     removeUser(socketId: string){
         this.users = this.users.filter(x => x.socket.id === socketId);
@@ -35,6 +36,14 @@ export class UserManager{
             return;
          }
          const room = this.roomManager.createRoom(user1,user2);
+    }
+    initHandlers(socket:Socket){
+        socket.on("offer",({sdp,roomId}: {sdp:string,roomId:string})=>{
+            this.roomManager.onOffer(roomId,sdp)
+        })
+        socket.on("answer",({sdp,roomId}: {sdp:string,roomId:string})=>{
+            this.roomManager.onAnswer(roomId,sdp)
+        })
     }
  
 
