@@ -13,15 +13,25 @@ export class RoomManager{
         this.rooms = new Map<string,Room>();
     }
     createRoom(user1: User, user2: User){
-        const roomId = this.generate();
-        this.rooms.set(roomId.toString(),{user1,user2});
-        user1?.socket.emit("send-offer",{
+        console.log("in Room");
+        const roomId = this.generate().toString();
+        this.rooms.set(roomId.toString(),{
+            user1,
+            user2
+        });
+        //console.log(user1);
+        user1.socket.emit("send-offer",{
             roomId
         })
+        // user2.socket.emit("answer",{
+        //     roomId
+        // })
       
     }
+
     onOffer(roomId: string,sdp: string){
         const user2 = this.rooms.get(roomId)?.user2;
+        console.log("in onOffer", user2);
         user2?.socket.emit("offer",{
             sdp,
             roomId
