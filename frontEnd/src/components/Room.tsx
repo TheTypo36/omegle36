@@ -13,9 +13,7 @@ export const Room = () =>{
     const [sendingPc,setSendingPc] = useState<null|RTCPeerConnection>(null);
     const [receivingPc,setReceivingPc] = useState<null|RTCPeerConnection>(null);
     const [remoteVideoTrack,setRemoteVideoTrack] = useState<null|MediaStreamTrack>(null);
-    const [localVideoTrack,setLocalVideoTrack] = useState<null|MediaStreamTrack>(null);
     const [remoteAudioTrack,setRemoteAudioTrack] = useState<null|MediaStreamTrack>(null);
-    const [localAudioTrack,setLocalAudioTrack] = useState<null|MediaStreamTrack>(null);
     useEffect(()=>{
         const socket = io(URL);
         socket.on('send-offer',async ({roomId})=>{
