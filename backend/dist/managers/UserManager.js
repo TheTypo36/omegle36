@@ -27,7 +27,7 @@ class UserManager {
         if (this.queue.length < 2) {
             return;
         }
-        // console.log(this.users);
+        console.log(this.queue.length);
         const u1 = this.queue.pop();
         const u2 = this.queue.pop();
         console.log(u1);
@@ -45,11 +45,14 @@ class UserManager {
     initHandlers(socket) {
         console.log("in offer");
         socket.on("offer", ({ sdp, roomId }) => {
-            this.roomManager.onOffer(roomId, sdp);
+            this.roomManager.onOffer(roomId, sdp, socket.id);
         });
         socket.on("answer", ({ sdp, roomId }) => {
             console.log("in offer");
-            this.roomManager.onAnswer(roomId, sdp);
+            this.roomManager.onAnswer(roomId, sdp, socket.id);
+        });
+        socket.on("add-ice-candidate", ({ candidate, roomId, type }) => {
+            this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
         });
     }
 }

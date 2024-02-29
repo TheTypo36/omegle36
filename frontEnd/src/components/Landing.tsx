@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Room } from "./Room";
 export const Landing = () =>{
 
 
@@ -14,14 +15,14 @@ export const Landing = () =>{
             video: true,
             audio: true
         })
-        const videoTracks = stream.getAudioTracks()[0];
-        const audioTracks = stream.getAudioTracks()[0];
-        setLocalAudioTrack(audioTracks);
-        setLocalVideoTrack(videoTracks);
+        const audioTrack = stream.getAudioTracks()[0];
+        const videoTrack = stream.getVideoTracks()[0];
+        setLocalAudioTrack(audioTrack);
+        setLocalVideoTrack(videoTrack);
         if(!videoRef.current){
             return;
         }
-        videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = new MediaStream([videoTrack]);
         videoRef.current.play();
 
     }
@@ -31,12 +32,19 @@ export const Landing = () =>{
             getCam();
         }
     },[videoRef]);
-    return <div>
+    if(!joined){
+
+        return <div>
         <video autoPlay ref={videoRef}></video>
        <input type="text" onChange={(e)=>{
-        setName(e.target.value);
-       }}>
+           setName(e.target.value);
+        }}>
        </input>
-       <Link to={`/room/?name=${name}`}>join</Link>
+       <button onClick={()=>{
+        setJoined(true);
+       }}>join</button>
     </div>
+    }else{
+        return <Room name={name} localAudioTrack={localAudioTrack} localVideoTrack={localVideoTrack} />
+    }
 }
