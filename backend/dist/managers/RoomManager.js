@@ -52,7 +52,7 @@ class RoomManager {
             return;
         }
         const reveivingUser = room.user1.socket.id == senderSocketid ? room.user2 : room.user1;
-        reveivingUser.socket.send("add-ice-candidate", ({ candidate, type }));
+        reveivingUser.socket.emit("add-ice-candidate", ({ candidate, type }));
     }
     generate() {
         return GLOBAL_ROOM_ID++;

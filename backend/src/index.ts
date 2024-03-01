@@ -1,11 +1,11 @@
-import express from 'express';
+//import express from 'express';
 import {Socket,Server} from 'socket.io';
 import http from 'http';
 import { UserManager } from './managers/UserManager';
 const {join} = require('node:path');
 
-const app = express();
-const server = http.createServer(app);
+//const app = express();
+const server = http.createServer(http);
 const io = new Server(server,{
     cors: {
         origin: "*",
