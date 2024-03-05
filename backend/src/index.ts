@@ -1,27 +1,31 @@
 //import express from 'express';
-import {Socket,Server} from 'socket.io';
-import http from 'http';
-import { UserManager } from './managers/UserManager';
-const {join} = require('node:path');
+import { Socket, Server } from "socket.io";
+import http from "http";
+import { UserManager } from "./managers/UserManager";
+const { join } = require("node:path");
 
 //const app = express();
 const server = http.createServer(http);
-const io = new Server(server,{
-    cors: {
-        origin: "*",
-    }
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
 });
- const userManager = new UserManager();
+const userManager = new UserManager();
 
-io.on('connection',(socket: Socket)=>{
-    console.log('a user connected');
-    userManager.addUser("anvi",socket);
-    socket.on("disconnect",()=>{
-        userManager.removeUser(socket.id);
-    })
+io.on("connection", (socket: Socket) => {
+  console.log("a user connected");
+  //   socket.on("send-message", ({ message, socket1 }) => {
+  //     console.log("MESSAGE", message);
+  //     socket.to(socket1.id).emit("receive-message", message);
+  //   });
+  userManager.addUser("anvi", socket);
+
+  socket.on("disconnect", () => {
+    userManager.removeUser(socket.id);
+  });
 });
 
-server.listen(3000, ()=>{
-    
-    console.log('server running at http://localhost:3000');
-})
+server.listen(3000, () => {
+  console.log("server running at http://localhost:3000");
+});

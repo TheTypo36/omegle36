@@ -49,7 +49,8 @@ export class UserManager {
     this.clearQueue();
   }
   initHandlers(socket: Socket) {
-    console.log("in offer");
+    console.log("afteruser");
+
     socket.on("offer", ({ sdp, roomId }: { sdp: string; roomId: string }) => {
       this.roomManager.onOffer(roomId, sdp, socket.id);
     });
@@ -60,15 +61,12 @@ export class UserManager {
     socket.on("add-ice-candidate", ({ candidate, roomId, type }) => {
       this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
     });
-    socket.on("send-message", (message, room) => {
-      if (room === "") {
-        socket.broadcast.emit("receive-message", message);
-      } else {
-        socket.to(room).emit("receive-message", message);
+    socket.on(
+      "send-message",
+      ({ message, roomId }: { message: string; roomId: string }) => {
+        console.log("recieving roomid in server", roomId, message, socket.id);
+        this.roomManager.onMessage(message, roomId, socket.id);
       }
-    });
-    socket.on("join-room", (room) => {
-      socket.join(room);
-    });
+    );
   }
 }

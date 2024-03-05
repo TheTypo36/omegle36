@@ -10,7 +10,8 @@ class UserManager {
     }
     addUser(name, socket) {
         this.users.push({
-            name, socket
+            name,
+            socket,
         });
         this.queue.push(socket.id);
         socket.send("lobby");
@@ -19,9 +20,9 @@ class UserManager {
         this.initHandlers(socket);
     }
     removeUser(socketId) {
-        const user = this.users.find(x => x.socket.id === socketId);
-        this.users = this.users.filter(x => x.socket.id !== socketId);
-        this.queue = this.queue.filter(x => x === socketId);
+        const user = this.users.find((x) => x.socket.id === socketId);
+        this.users = this.users.filter((x) => x.socket.id !== socketId);
+        this.queue = this.queue.filter((x) => x === socketId);
     }
     clearQueue() {
         if (this.queue.length < 2) {
@@ -32,8 +33,8 @@ class UserManager {
         const u2 = this.queue.pop();
         console.log(u1);
         console.log(u2);
-        const user1 = this.users.find(x => x.socket.id === u1);
-        const user2 = this.users.find(x => x.socket.id === u2);
+        const user1 = this.users.find((x) => x.socket.id === u1);
+        const user2 = this.users.find((x) => x.socket.id === u2);
         console.log("user1: " + user1);
         console.log("user2: " + user2);
         if (!user1 || !user2) {
@@ -43,7 +44,7 @@ class UserManager {
         this.clearQueue();
     }
     initHandlers(socket) {
-        console.log("in offer");
+        console.log("afteruser");
         socket.on("offer", ({ sdp, roomId }) => {
             this.roomManager.onOffer(roomId, sdp, socket.id);
         });
@@ -53,6 +54,10 @@ class UserManager {
         });
         socket.on("add-ice-candidate", ({ candidate, roomId, type }) => {
             this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
+        });
+        socket.on("send-message", ({ message, roomId }) => {
+            console.log("recieving roomid in server", roomId, message, socket.id);
+            this.roomManager.onMessage(message, roomId, socket.id);
         });
     }
 }

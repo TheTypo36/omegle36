@@ -31,6 +31,7 @@ export const Room = ({
   const remoteVideoRef = useRef<HTMLVideoElement>();
   const localVideoRef = useRef<HTMLVideoElement>();
   const [message, setMessage] = useState("");
+  const [roomId, setRoomId] = useState("");
   useEffect(() => {
     const socket = io(URL);
     socket.on("send-offer", async ({ roomId }) => {
@@ -161,6 +162,7 @@ export const Room = ({
         pc?.setRemoteDescription(remoteSdp);
         return pc;
       });
+      setRoomId(roomId);
       console.log("loop closed");
     });
 
@@ -193,7 +195,29 @@ export const Room = ({
         });
       }
     });
+    console.log("hello world");
+    socket?.on("connect", () => {
+      if (!socket.id) {
+        return;
+      }
+      alert(socket.id);
+    });
 
+    socket?.on(
+      "receive-message",
+      ({
+        message,
+        roomId,
+        socketId,
+      }: {
+        message: string;
+        roomId: string;
+        socketId: string;
+      }) => {
+        console.log("receing in client again", roomId, message, socketId);
+        displayMessage(message);
+      }
+    );
     setSocket(socket);
   }, [name]);
 
@@ -205,19 +229,7 @@ export const Room = ({
       }
     }
   }, [localVideoRef]);
-  useEffect(() => {
-    socket?.on("connect", () => {
-      if (!socket.id) {
-        return;
-      }
-      displayMessage(socket.id);
-    });
-    socket?.emit("send-message", message);
 
-    socket?.on("receive-message", (msg) => {
-      displayMessage(msg);
-    });
-  }, [message]);
   const displayMessage = (msg: string) => {
     const box = document.getElementById("displayBox")!;
     const div = document.createElement("div");
@@ -226,9 +238,15 @@ export const Room = ({
   };
   const handleSend = (e: any) => {
     e.preventDefault();
-    const message = document.getElementsByTagName("input")[0].name;
+    const message = document.getElementsByTagName("input")[0].value;
+    document.getElementsByTagName("input")[0].value = "";
     setMessage(message);
     displayMessage(message);
+    console.log("message", { message, roomId });
+    socket?.emit("send-message", {
+      message,
+      roomId,
+    });
   };
   return (
     <RoomContainer>
@@ -254,6 +272,7 @@ export const Room = ({
 
 const RoomContainer = styled.div`
   body: 0px;
+  width: 100%;
 `;
 const Nav = styled.div`
   position: fixed;
@@ -268,13 +287,22 @@ const VideoContainer = styled.div`
   margin-left: 20px;
 `;
 const ChattingContainer = styled.div`
-  width: 300px;
-  height: 300px;
+  positon: fixed;
+  bottom: 0;
+
+  width: 100vw;
+  min-height: 100px;
+  height: auto;
   display: flex;
   flex-direction: column;
+
   #displayBox {
-    width: 270px;
+    border-radius: 10px;
+    width: 100%;
+    min-height: 100px;
     height: 100%;
-    border: 1px solid black;
+    background: #efefef;
+    padding: 20px;
+    text-size: 20px;
   }
 `;

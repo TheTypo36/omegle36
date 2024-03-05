@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import './App.css'
-import { Landing } from './components/Landing';
-import { Room } from './components/Room';
+import "./App.css";
+import { Landing } from "./components/Landing";
+import { Room } from "./components/Room";
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <BrowserRouter>
@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Landing />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
