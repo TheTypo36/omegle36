@@ -289,7 +289,7 @@ const VideoContainer = styled.div`
 const ChattingContainer = styled.div`
   positon: fixed;
   bottom: 0;
-
+  box-shadow: 0 0 0 0.2 black;
   width: 100vw;
   min-height: 100px;
   height: auto;
