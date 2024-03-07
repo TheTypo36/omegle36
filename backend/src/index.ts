@@ -5,6 +5,7 @@ import { UserManager } from "./managers/UserManager";
 const { join } = require("node:path");
 
 //const app = express();
+const port = process.env.PORT || 3000;
 const server = http.createServer(http);
 const io = new Server(server, {
   cors: {
@@ -26,6 +27,6 @@ io.on("connection", (socket: Socket) => {
   });
 });
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log("server running at http://localhost:3000");
 });
