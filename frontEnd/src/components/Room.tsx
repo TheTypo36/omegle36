@@ -2,9 +2,8 @@ import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
-import { Chatting } from "./Chatting";
 
-const URL = "http://localhost:3000";
+const URL = "https://omegle36.onrender.com";
 
 export const Room = ({
   name,
