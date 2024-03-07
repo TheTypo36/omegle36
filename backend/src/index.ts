@@ -1,11 +1,12 @@
 //import express from 'express';
 import { Socket, Server } from "socket.io";
 import http from "http";
+import "dotenv/config";
 import { UserManager } from "./managers/UserManager";
 const { join } = require("node:path");
 
 //const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3010;
 const server = http.createServer(http);
 const io = new Server(server, {
   cors: {
