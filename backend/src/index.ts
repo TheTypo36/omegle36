@@ -8,7 +8,7 @@ const { join } = require("node:path");
 const server = http.createServer(http);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://omegle36.onrender.com",
   },
 });
 const userManager = new UserManager();

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+
 import { Socket, io } from "socket.io-client";
 
 const URL = "https://omegle36.onrender.com";
@@ -14,7 +14,6 @@ export const Room = ({
   localAudioTrack: MediaStreamTrack | null;
   localVideoTrack: MediaStreamTrack | null;
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [lobby, setLobby] = useState(true);
   const [socket, setSocket] = useState<null | Socket>(null);
   const [sendingPc, setSendingPc] = useState<null | RTCPeerConnection>(null);
@@ -89,10 +88,11 @@ export const Room = ({
       setRemoteMediaStream(stream);
       // trickle ice
       setReceivingPc(pc);
+      //@ts-ignore
       window.pcr = pc;
       pc.ontrack = (e) => {
         alert("ontrack");
-        // console.error("inside ontrack");
+        console.error("inside ontrack", e);
         // const {track, type} = e;
         // if (type == 'audio') {
         //     // setRemoteAudioTrack(track);
@@ -254,11 +254,15 @@ export const Room = ({
       </Nav>
       Hi {name}
       <VideoContainer>
-        <video autoPlay width={400} height={400} ref={localVideoRef} />
+        {localVideoRef && (
+          <video autoPlay width={400} height={400} ref={localVideoRef} />
+        )}
       </VideoContainer>
       {lobby ? "Waiting to connect you to someone" : null}
       <VideoContainer>
-        <video autoPlay width={400} height={400} ref={remoteVideoRef} />
+        {remoteVideoRef.current && (
+          <video autoPlay width={400} height={400} ref={remoteVideoRef} />
+        )}
       </VideoContainer>
       <ChattingContainer>
         <div id="displayBox"></div>
